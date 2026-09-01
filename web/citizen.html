@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MunduroVehDB – portal obywatela</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-citizen">
+  <div class="wrap">
+    <div class="session" id="session"></div>
+    
+    <div class="card">
+      <div class="logo-row"><img src="img/policja-logo.svg" alt="Policja"></div>
+      <p class="logo-cap">Wizualizacja prezentacyjna · znak urzędowy Policji · warstwa cywilna BWD</p>
+      <div class="brand"><div><h1>MunduroVehDB</h1></div><div class="badge">Portal obywatela</div></div>
+      <p class="sub">Twój profil, pojazdy i kanały kontaktu. Bez lokalizacji telefonu.</p>
+      <div id="msg"></div>
+
+      <div id="citizenLoginView">
+        <form onsubmit="loginCitizen(event)">
+          <label>Zaloguj się numerem telefonu</label>
+          <input id="loginPhone" required placeholder="696656585">
+          <p class="muted">Na pokaz: 696656585 (Robert). W produkcji będzie kod SMS.</p>
+          <button type="submit">Zaloguj do profilu</button>
+        </form>
+        <p class="muted"><a href="#" onclick="document.getElementById('regForm').style.display='block'; return false;">Nie mam jeszcze profilu — rejestracja</a></p>
+        <form id="regForm" onsubmit="registerCitizen(event)" style="display:none">
+          <label>Imię</label><input id="fn" required>
+          <label>Nazwisko</label><input id="ln" required>
+          <label>Telefon</label><input id="phone" required placeholder="696656585">
+          <label>E-mail</label><input id="email" type="email">
+          <label>Miejscowość</label><input id="city" required>
+          <label>Województwo</label>
+          <select id="voi" required><option value="">— wybierz —</option></select>
+          <label>Pierwszy numer rejestracyjny</label><input id="plate" required>
+          <label>VIN</label><input id="vin">
+          <div class="check"><input id="consent" type="checkbox"><div>Wyrażam zgodę na kontakt służbowy. Nie wyrażam zgody na lokalizację telefonu.</div></div>
+          <button type="submit">Utwórz profil</button>
+        </form>
+      </div>
+
+      <div id="citizenAppView" style="display:none">
+        <section class="block">
+          <div class="sec-head"><h3>Dane osobowe</h3><button type="button" class="secondary" onclick="openProfileModal()">Edytuj profil</button></div>
+          <div id="personCard" class="list"></div>
+        </section>
+        <section class="block">
+          <div class="sec-head"><h3>Pojazdy</h3><button type="button" onclick="openVehicleModal()">Dodaj pojazd</button></div>
+          <div id="vehicleList" class="list"></div>
+        </section>
+        <section class="block">
+          <div class="sec-head"><h3>Social media</h3><button type="button" class="secondary" onclick="openSocialModal()">Edytuj social</button></div>
+          <div id="socialList" class="list"></div>
+        </section>
+        <button type="button" class="primary-save" onclick="saveCitizenChanges()">Zapisz zmiany</button>
+        <button class="secondary" type="button" onclick="deleteCitizen()">Wycofaj zgodę i wyłącz profil</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal" class="modal" hidden>
+    <div class="modal-card">
+      <h3 id="modalTitle">Dodaj</h3>
+      <div id="modalBody"></div>
+      <div class="row">
+        <button type="button" onclick="submitModal()">Zapisz</button>
+        <button class="secondary" type="button" onclick="closeModal()">Anuluj</button>
+      </div>
+    </div>
+  </div>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

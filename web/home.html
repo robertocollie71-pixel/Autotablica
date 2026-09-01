@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MunduroVehDB</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-officer">
+  <div class="wrap">
+    <div class="session" id="session"></div>
+    <div class="nav">
+      <a href="home.html">Start</a>
+      <a href="index.html">Panel służby</a>
+      <a href="admin.html">Panel admina</a>
+      <a href="citizen.html">Portal obywatela</a>
+      <a href="#" onclick="logoutOfficer(); return false;">Wyloguj</a>
+    </div>
+    <div class="card">
+      <div class="logo-row"><img src="img/policja-logo.svg" alt="Policja"></div>
+      <p class="logo-cap">Wizualizacja prezentacyjna · warstwa cywilna BWD</p>
+      <div class="brand"><div><h1>MunduroVehDB</h1></div><div class="badge">Start</div></div>
+      <p class="sub">Dobrowolny kontakt z właścicielem pojazdu. Bez lokalizacji.</p>
+      <div class="tiles">
+        <a class="tile tile-citizen" href="citizen.html">
+          <strong>Portal obywatela</strong>
+          <span>Zarejestruj pojazd, zgodę i kanały kontaktu</span>
+        </a>
+        <a class="tile tile-officer" href="index.html">
+          <strong>Panel służby</strong>
+          <span>Wyszukaj tablicę lub VIN, karta interwencji</span>
+        </a>
+        <a class="tile tile-admin" href="admin.html">
+          <strong>Panel admina</strong>
+          <span>Lista rejestracji i eksport Excel</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MunduroVehDB – panel administratora</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-admin">
+  <div class="wrap">
+    <div class="session" id="session"></div>
+    
+    <div class="card">
+      <div class="logo-row">
+        <img src="img/policja-logo.svg" alt="Policja">
+      </div>
+      <p class="logo-cap">Wizualizacja prezentacyjna · znak urzędowy Policji · warstwa cywilna BWD</p>
+
+      <div class="brand"><div><h1>MunduroVehDB</h1></div><div class="badge">Administracja</div></div>
+      <p class="sub">Panel administratora · rejestracje · audyt ruchów · eksport Excel</p>
+
+      <div id="officerLoginView">
+      <form onsubmit="loginOfficer(event)">
+        <label>Login</label>
+        <input id="user" value="policja">
+        <label>Hasło</label>
+        <input id="pass" type="password" value="demo123">
+        <label>Komenda / poziom</label>
+        <select id="unit" required>
+          <option value="">— wybierz komendę —</option>
+        </select>
+        <button type="submit">Zaloguj</button>
+      </form>
+      </div>
+      <div id="msg" class="result muted">Zaloguj się, potem odśwież listę.</div>
+
+      <div id="officerAppView" style="display:none">
+      <div class="row">
+        <button type="button" onclick="loadCitizens()">Odśwież listę z bazy</button>
+        <button class="secondary" type="button" onclick="exportXlsx()">Export do Excel (.xlsx)</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Imię i nazwisko</th>
+            <th>Telefon</th>
+            <th>Zgoda</th>
+            <th>Pojazdy</th>
+            <th>Miejscowość</th>
+            <th>Komenda</th>
+            <th>Social</th>
+          </tr>
+        </thead>
+        <tbody id="citizens"></tbody>
+      </table>
+
+      <section class="block">
+        <div class="sec-head"><h3>Audyt wszystkich ruchów</h3></div>
+        <div class="row">
+          <button type="button" onclick="loadAudit()">Odśwież audyt</button>
+          <button class="secondary" type="button" onclick="exportAuditXlsx()">Export audytu do Excel</button>
+        </div>
+        <table>
+          <thead><tr><th>Czas</th><th>Kto</th><th>Akcja</th><th>Tablica</th><th>Wynik</th></tr></thead>
+          <tbody id="audit"></tbody>
+        </table>
+      </section>
+      </div>
+    </div>
+  </div>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

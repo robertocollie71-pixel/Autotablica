@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MunduroVehDB – panel służby</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-officer">
+  <div class="wrap">
+    <div class="session" id="session"></div>
+    
+    <div class="card">
+      <div class="logo-row">
+        <img src="img/policja-logo.svg" alt="Policja">
+      </div>
+      <p class="logo-cap">Wizualizacja prezentacyjna · znak urzędowy Policji · warstwa cywilna BWD</p>
+
+      <div class="brand"><div><h1>MunduroVehDB</h1></div><div class="badge">Panel służby</div></div>
+      <p class="sub">Panel służby · warstwa cywilna · wersja demonstracyjna</p>
+      <div class="note">System pokazuje kontakt tylko przy dobrowolnej zgodzie właściciela. Brak lokalizacji. Brak CEPiK/UFG na tym etapie.</div>
+
+      <div id="officerLoginView">
+      <form onsubmit="loginOfficer(event)">
+        <label>Login</label>
+        <input id="user" value="policja">
+        <label>Hasło</label>
+        <input id="pass" type="password" value="demo123">
+        <label>Komenda / poziom</label>
+        <select id="unit" required>
+          <option value="">— wybierz komendę —</option>
+        </select>
+        <button type="submit">Zaloguj</button>
+      </form>
+      </div>
+
+      <div id="officerAppView" style="display:none">
+      <form onsubmit="lookupVehicle(event)">
+        <label>Numer rejestracyjny lub VIN</label>
+        <input id="query" placeholder="WA00000 albo SPALONYVIN3871XYZ">
+        <button type="submit">Szukaj</button>
+      </form>
+
+      <div id="msg" class="result muted">Zaloguj się, potem wpisz tablicę albo VIN.</div>
+      <div class="row"><button class="secondary" type="button" onclick="window.print()">Drukuj kartę</button></div>
+
+      <p class="muted">Przykłady na pokaz: WA00000 (zgoda + social), WA11111 (brak zgody), VIN SPALONYVIN3871XYZ (pojazd bez czytelnych tablic).</p>
+      </div>
+
+    </div>
+  </div>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
