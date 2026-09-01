@@ -57,18 +57,19 @@ def export_xlsx(db: Session = Depends(get_db), officer: dict = Depends(require_o
     ws.title = "Obywatele"
     ws.append(
         [
-            "ID", "Imię", "Nazwisko", "Telefon", "Zgoda na kontakt", "Pojazdy", "VIN",
-            "Facebook", "Instagram", "X", "LinkedIn", "TikTok", "Miejscowość", "Województwo", "Komenda",
+            "ID", "Imię", "Nazwisko", "Telefon", "E-mail", "Zgoda na kontakt",
+            "Pojazdy", "VIN", "Miejscowość", "Województwo", "Komenda",
+            "Facebook", "Instagram", "X", "LinkedIn", "TikTok",
         ]
     )
     for r in _rows(db, officer["unit"]):
         ws.append(
             [
-                r["id"], r["first_name"], r["last_name"], r["phone"],
+                r["id"], r["first_name"], r["last_name"], r["phone"], r.get("email",""),
                 "tak" if r["consent_contact"] else "nie",
                 ", ".join(r["vehicles"]), ", ".join(r["vins"]),
-                r["facebook"], r["instagram"], r["x_handle"], r["linkedin"], r.get("tiktok",""),
                 r["city"], r["voivodeship"], r["unit"],
+                r["facebook"], r["instagram"], r["x_handle"], r["linkedin"], r.get("tiktok",""),
             ]
         )
     buf = BytesIO()
