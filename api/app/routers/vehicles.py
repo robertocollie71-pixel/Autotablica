@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import AuditLog, Vehicle
+from app.models import AuditLog, Owner, Vehicle
 from app.schemas import FleetItem, SocialOut, UnitOut, VehicleOut
 from app.police_units import assign_unit, in_territory
 from app.security import require_officer
@@ -13,11 +13,22 @@ router = APIRouter(prefix="/vehicles", tags=["vehicles"])
 @router.get("/{query}", response_model=VehicleOut)
 def lookup(query: str, db: Session = Depends(get_db), officer: dict = Depends(require_officer)):
     q = query.upper().replace(" ", "")
+    digits = "".join(ch for ch in query if ch.isdigit())
     vehicle = (
         db.query(Vehicle)
         .filter((Vehicle.plate == q) | (Vehicle.vin == q), Vehicle.is_active.is_(True))
         .one_or_none()
     )
+    if vehicle is None and len(digits) >= 9:
+        owners = db.query(Owner).all()
+        owner_hit = None
+        for o in owners:
+            ph = "".join(ch for ch in str(o.phone or "") if ch.isdigit())
+            if ph.endswith(digits[-9:]) or digits.endswith(ph[-9:]):
+                owner_hit = o
+                break
+        if owner_hit:
+            vehicle = next((x for x in owner_hit.vehicles if x.is_active), None)
 
     if vehicle is None:
         db.add(AuditLog(actor=officer['label'], action="lookup", plate=q, detail="brak w rejestrze"))
