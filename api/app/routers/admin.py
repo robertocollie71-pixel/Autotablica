@@ -1,6 +1,6 @@
 from io import BytesIO
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import StreamingResponse
 from openpyxl import Workbook
 from sqlalchemy.orm import Session
@@ -40,9 +40,19 @@ def _rows(db: Session, unit_code: str):
                 "city": o.city or "",
                 "voivodeship": o.voivodeship or "",
                 "unit": assigned["name"],
+                "unit_code": assigned["code"],
             }
         )
     return out
+
+
+def _filter_units(rows, units: str | None):
+    if not units:
+        return rows
+    codes = {c.strip() for c in units.split(",") if c.strip()}
+    if not codes:
+        return rows
+    return [r for r in rows if r.get("unit_code") in codes]
 
 
 @router.get("/citizens")
@@ -51,7 +61,11 @@ def list_citizens(db: Session = Depends(get_db), officer: dict = Depends(require
 
 
 @router.get("/citizens.xlsx")
-def export_xlsx(db: Session = Depends(get_db), officer: dict = Depends(require_officer)):
+def export_xlsx(
+    db: Session = Depends(get_db),
+    officer: dict = Depends(require_officer),
+    units: str | None = Query(None),
+):
     wb = Workbook()
     ws = wb.active
     ws.title = "Obywatele"
@@ -62,7 +76,7 @@ def export_xlsx(db: Session = Depends(get_db), officer: dict = Depends(require_o
             "Facebook", "Instagram", "X", "LinkedIn", "TikTok",
         ]
     )
-    for r in _rows(db, officer["unit"]):
+    for r in _filter_units(_rows(db, officer["unit"]), units):
         ws.append(
             [
                 r["id"], r["first_name"], r["last_name"], r["phone"], r.get("email",""),
