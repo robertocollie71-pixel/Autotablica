@@ -55,6 +55,23 @@ def _filter_units(rows, units: str | None):
     return [r for r in rows if r.get("unit_code") in codes]
 
 
+def _filter_query(rows, q: str | None):
+    raw = (q or "").strip()
+    if not raw:
+        return rows
+    digits = "".join(ch for ch in raw if ch.isdigit())
+    plate = "".join(ch for ch in raw.upper() if ch.isalnum())
+    out = []
+    for r in rows:
+        ph = "".join(ch for ch in str(r.get("phone") or "") if ch.isdigit())
+        plates = "".join(ch for ch in " ".join(r.get("vehicles") or []).upper() if ch.isalnum() or ch == " ")
+        if digits and digits in ph:
+            out.append(r)
+        elif plate and plate in plates.replace(" ", ""):
+            out.append(r)
+    return out
+
+
 @router.get("/citizens")
 def list_citizens(db: Session = Depends(get_db), officer: dict = Depends(require_officer)):
     return _rows(db, officer["unit"])
@@ -65,6 +82,7 @@ def export_xlsx(
     db: Session = Depends(get_db),
     officer: dict = Depends(require_officer),
     units: str | None = Query(None),
+    q: str | None = Query(None),
 ):
     wb = Workbook()
     ws = wb.active
@@ -76,7 +94,7 @@ def export_xlsx(
             "Facebook", "Instagram", "X", "LinkedIn", "TikTok",
         ]
     )
-    for r in _filter_units(_rows(db, officer["unit"]), units):
+    for r in _filter_query(_filter_units(_rows(db, officer["unit"]), units), q):
         ws.append(
             [
                 r["id"], r["first_name"], r["last_name"], r["phone"], r.get("email",""),
